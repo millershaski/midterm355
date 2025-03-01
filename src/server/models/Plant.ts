@@ -3,8 +3,6 @@ import { sequelize } from "../config/SequelizeInstance";
 import { Validator } from "./Validator";
 import { Request } from "express";
 
-const sanitizer = require("sanitize");
-
 
 export class Plant extends Model 
 {
@@ -115,11 +113,11 @@ export class PlantInputData
 
         try
         {
-            this.plantLabel = this.GetSanitizedString("plantLabel", req);
-            this.species = this.GetSanitizedString("species", req);
-            this.plantDate = this.GetSanitizedString("plantDate", req);
-            this.wateringSchedule = parseInt(this.GetSanitizedString("wateringSchedule", req));
-            this.notes = this.GetSanitizedString("notes", req); 
+            this.plantLabel = this.GetString("plantLabel", req);
+            this.species = this.GetString("species", req);
+            this.plantDate = this.GetString("plantDate", req);
+            this.wateringSchedule = parseInt(this.GetString("wateringSchedule", req));
+            this.notes = this.GetString("notes", req); 
             if(this.notes == null)
                 this.notes = "";  
         }
@@ -131,10 +129,10 @@ export class PlantInputData
 
 
 
-    // Returns a sanitized string using req.body[key]
-    GetSanitizedString(key: string, req: Request): string
+    // Separate method so that we can sanitize if we need to (not implemented)
+    GetString(key: string, req: Request): string
     {
-        return sanitizer.value(req.body[key], "string");
+        return req.body[key];
     }
 
 

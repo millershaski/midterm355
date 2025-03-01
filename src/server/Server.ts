@@ -7,18 +7,18 @@
 
 
 
-import { createServer } from "http"; // Import Node.js built-in module to create an HTTP server
-import express, {Express, Request, Response } from "express"; // Import Express and its type definitions for TypeScript
-import helmet from "helmet"; // Import Helmet for security enhancements
-import { engine } from "express-handlebars"; // Import Handlebars as the template engine
+import { createServer } from "http";
+import express, {Express, Request, Response } from "express"; 
+import helmet from "helmet";
+import { engine } from "express-handlebars"; 
 import { Get404PageString } from "./FileTemplates";
 import { ResetDatabase } from "./config/DatabaseReset"
 
 
-const routes = require('./controllers'); // Import custom route handlers from the controllers directory
-const port = 5000; // Define the port number for the server to listen on
+const routes = require('./controllers'); 
+const port = 5000;
 
-const app: Express = express(); // Initialize an Express application
+const app: Express = express(); 
 
 
 // initialize express
@@ -39,14 +39,14 @@ app.use((req: Request, resp: Response, next) =>
 });
 
     
-app.use(helmet()); // Helmet is used to set various HTTP headers for better security.
-app.use(express.json()); // express.json() parses incoming JSON payloads (useful for APIs receiving JSON requests).
-app.use(express.urlencoded({ extended: true })); // express.urlencoded({ extended: true }) parses URL-encoded payloads (useful for form submissions).
+app.use(helmet());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // parses URL-encoded payloads (useful for form submissions).
 
-app.use(routes); // this allows us to use the router for forms.ts
+app.use(routes); 
 
-app.use(express.static("static")); // Serve static files (such as images, CSS, JavaScript) from the "static" directory.
-app.use(express.static("node_modules/bootstrap/dist")); // serve Bootstrap assets from the "node_modules/bootstrap/dist" directory.
+app.use(express.static("static")); 
+app.use(express.static("node_modules/bootstrap/dist"));
 
 
 /**
@@ -54,6 +54,8 @@ app.use(express.static("node_modules/bootstrap/dist")); // serve Bootstrap asset
  * This ensures that when a user visits the base URL, they are automatically sent to the form page.
  */
 //app.use("^/$", (req, resp) => resp.redirect("/"));
+
+//app.use("/", (req, resp) => resp.redirect("/plants/"));
 
 
 // this will automatically return a 404 for any non-defined route.

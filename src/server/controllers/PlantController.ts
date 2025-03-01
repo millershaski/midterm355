@@ -60,17 +60,9 @@ function OnPlantInputInvalid(resp: Response)
         errorMessage += (value + "<br>");
     });
 
+    console.log(errorMessage);
     resp.status(400).send(errorMessage);
 }
-
-
-
-// We can't put directly from an html form, so instead we'll handle posts to this route as if it had been a put
-router.post("/:id/update", async (req: Request, resp: Response) =>
-{
-    console.log("Dirty put");
-    //await OnPlantPut_Update(req, resp);
-});
 
 
 
@@ -79,13 +71,6 @@ router.put("/:id", async (req: Request, resp: Response) =>
 {
     console.log("Correct put (update)");
 
-    // await OnPlantPut_Update(req, resp);
-});
-    
-
-
-async function OnPlantPut_Update(req: Request, resp: Response)
-{
     const foundPlant = await Plant.findOne({ where: {id: req.params.id} });
     if(foundPlant == null)
     {
@@ -94,16 +79,19 @@ async function OnPlantPut_Update(req: Request, resp: Response)
         return;
     }
 
+
     const input: PlantInputData = new PlantInputData(req);
     if(input.IsValid() == false)
         OnPlantInputInvalid(resp);
     else   
     {
+        console.log("Updating plant with: " + input);
+
         await foundPlant.UpdateWith(input);
         resp.status(200).send("Updated new plant");   
-    }  
-}
-
+    }
+});
+    
 
 
 // view single plant (at bottom so that something like /plants/new is not blocked)

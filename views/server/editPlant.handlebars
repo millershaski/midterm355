@@ -6,7 +6,7 @@
         <div class="col-md-6 col-lg-4">
             <div class="card shadow p-4 bg-secondary text-white">
                 <h3 class="text-center mb-4">Edit Plant</h3>
-                <form action = "update" method="POST" id = "plantForm" novalidate>
+                <form action = "update" method="POST" id = "plantFormEdit" novalidate>
                     <div class="mb-3">
                         <label for="plantLabel" class="form-label">Plant Label:</label>
                         <input type="text" value = "{{label}}" name="plantLabel" class="form-control bg-dark text-white" required>
@@ -28,7 +28,7 @@
                     <div class="mb-3">
                         <label for="wateringSchedule" class="form-label">Watering Schedule:</label>
                         <select name="wateringSchedule" class="form-select bg-dark text-white">                            
-                            <option value="{{waterScheduleInt}}" selected disabled hidden>{{waterSchedule}}</option>
+                            <option value="{{waterScheduleInt}}" selected hidden>{{waterSchedule}}</option>
                             <option value="1">Daily</option>
                             <option value="2">Every Other Day</option>
                             <option value="7">Weekly</option>
