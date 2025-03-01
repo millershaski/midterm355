@@ -1,7 +1,7 @@
-import express, {Request, response, Response} from "express";
-import {Plant} from "../models";
-import {Validator} from "../models/Validator";
+import express, { Request, Response } from "express";
 import { Get404PageString } from "../FileTemplates";
+import { Plant, PlantInputData } from "../models/Plant";
+import { Validator } from "../models/Validator";
 
 const router = express.Router();
 
@@ -36,65 +36,12 @@ router.get("/new", async (req: Request, resp: Response) =>
 
 
 
-class PlantInputData
-{
-    plantLabel: string = "";
-    species: string = "";
-    plantDate: string = "";
-    wateringSchedule: number = 0;
-    notes: string = "";
-
-    constructor(req: Request)
-    {
-        if(req == null)
-            return;
-
-        try
-        {
-            this.plantLabel = req.body["plantLabel"];
-            this.species = req.body["species"];
-            this.plantDate = req.body["plantDate"];
-            this.wateringSchedule = parseInt(req.body["wateringSchedule"])
-            this.notes = req.body["notes"]; 
-            if(this.notes == null)
-                this.notes = "";  
-        }
-        catch
-        {
-            // I don't care about the error too much, validation will fail later
-        }         
-    }
-
-
-    
-    IsValid(): boolean
-    {
-        Validator.Reset();
-        Validator.Validate(this.plantLabel, "Label", Validator.NotEmptyString);
-        Validator.Validate(this.species, "Species", Validator.NotEmptyString);
-        Validator.Validate(this.plantDate, "Plant Date", Validator.ValidateDate);
-        Validator.Validate(this.wateringSchedule, "Watering Schedule", Validator.ValidateNonZeroPositiveNumber);
-
-        return Validator.IsValid();
-    }    
-}
-
-
-
+// handles creating a new plant
 router.post("/new", async (req: Request, resp: Response) =>
 {
     const input: PlantInputData = new PlantInputData(req);
     if(input.IsValid() == false)
-    {
-        let errorMessage = "";
-        const allErrors = Validator.GetAllErrorMessages();
-        allErrors.forEach((value) =>
-        {
-            errorMessage += (value + "<br>");
-        });
-    
-        resp.status(400).send(errorMessage);
-    }
+        OnPlantInputInvalid(resp);    
     else   
     {
         await Plant.create({label: input.plantLabel, species: input.species, plantDate: input.plantDate, waterSchedule: input.wateringSchedule, lastWaterDate: input.plantDate, notes: input.notes});
@@ -104,45 +51,55 @@ router.post("/new", async (req: Request, resp: Response) =>
 
 
 
+function OnPlantInputInvalid(resp: Response)
+{
+    let errorMessage = "";
+    const allErrors = Validator.GetAllErrorMessages();
+    allErrors.forEach((value) =>
+    {
+        errorMessage += (value + "<br>");
+    });
+
+    resp.status(400).send(errorMessage);
+}
+
+
+
 // We can't put directly from an html form, so instead we'll handle posts to this route as if it had been a put
-router.post("/:id/update", (req: Request, resp: Response) =>
+router.post("/:id/update", async (req: Request, resp: Response) =>
 {
     console.log("Dirty put");
-    OnPlantPut(req, resp);
+    await OnPlantPut_Update(req, resp);
 });
 
 
 
 // update a plant
-router.put("/:id", async (req, resp) => 
+router.put("/:id", async (req: Request, resp: Response) => 
 {
-    OnPlantPut(req, resp);
+    await OnPlantPut_Update(req, resp);
 });
     
 
 
-function OnPlantPut(req: Request, resp: Response)
+async function OnPlantPut_Update(req: Request, resp: Response)
 {
-    /*try
+    const foundPlant = await Plant.findOne({ where: {id: req.params.id} });
+    if(foundPlant == null)
     {
-        const foundPlant = await Plant.findOne({ where: {id: req.params.id} });
-        
-        if(foundPlant != null)
-        {
-            const plainPlant = foundPlant.GetAllHandlebarData();
-            resp.render("partials/singlePlantPartial", foundPlant.GetAllHandlebarData());
-        } 
-        else
-        {
-            console.error("Unable to find plant with ID: " + req.params.id); 
-            resp.status(500).send("Internal Server Error"); 
-        }
-    }
-    catch (error) 
-    {
-        console.error("Error finding plants: ", error); 
+        console.error("Unable to find plant with id: ", req.params.id); 
         resp.status(500).send("Internal Server Error"); 
-    }*/
+        return;
+    }
+
+    const input: PlantInputData = new PlantInputData(req);
+    if(input.IsValid() == false)
+        OnPlantInputInvalid(resp);
+    else   
+    {
+        await foundPlant.UpdateWith(input);
+        resp.status(200).send("Updated new plant");   
+    }  
 }
 
 
@@ -155,11 +112,11 @@ router.get("/:id", async (req, resp) =>
         const foundPlant = await Plant.findOne({ where: {id: req.params.id} });
         
         if(foundPlant != null)
-            resp.render("singlePlant", foundPlant.GetAllHandlebarData());
+            resp.render("singlePlant", foundPlant.GetAllHandlebarDataForEdit());
         else
             resp.status(404).send(Get404PageString());        
     }
-    catch (error) 
+    catch(error) 
     {
         console.error("Error fetching plants:", error); 
         resp.status(500).send("Internal Server Error"); 
@@ -167,6 +124,5 @@ router.get("/:id", async (req, resp) =>
 });
 
 
+
 module.exports = router;
-
-

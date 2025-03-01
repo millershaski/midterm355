@@ -28,6 +28,13 @@ export const Validator =
     },
 
 
+    
+    GetAllErrorMessages(): string[]
+    {
+        return allFailMessages_;
+    },
+
+
 
     Validate(obj: any, label: string, ...allCallbacks: ValidateCallback[])
     {
@@ -40,13 +47,6 @@ export const Validator =
             if(errorMessage)
                 allFailMessages_.push(label + " " + errorMessage);
         });
-    },
-
-
-
-    GetAllErrorMessages(): string[]
-    {
-        return allFailMessages_;
     },
 
 
