@@ -5,23 +5,23 @@
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
             <div class="card shadow p-4 bg-secondary text-white">
-                <h3 class="text-center mb-4">Add Plant</h3>
-                <form method="POST" id = "plantForm" novalidate>
+                <h3 class="text-center mb-4">Edit Plant</h3>
+                <form action = "{{id}}/update" method="POST" id = "plantForm" novalidate>
                     <div class="mb-3">
                         <label for="plantLabel" class="form-label">Plant Label:</label>
-                        <input type="text" name="plantLabel" class="form-control bg-dark text-white" required>
+                        <input type="text" value = "{{label}}" name="plantLabel" class="form-control bg-dark text-white" required>
                         <div class="invalid-feedback">Please provide a plant label</div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="species" class="form-label">Species:</label>
-                        <input type="text" name="species" class="form-control bg-dark text-white" required>
+                        <input type="text" value = "{{species}}" name="species" class="form-control bg-dark text-white" required>
                         <div class="invalid-feedback">Please provide a species</div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="plantDate" class="form-label">Planting Date:</label>
-                        <input type="date" name="plantDate" class="form-control bg-dark text-white" required>                        
+                        <input type="date" value = "{{plantDate}}" name="plantDate" class="form-control bg-dark text-white" required>                        
                         <div class="invalid-feedback">Please provide a date</div>
                     </div>
                     
@@ -38,8 +38,7 @@
                     <div class="mb-3">
                         <label for="notes" class="form-label">Additional Notes:</label>
                         <textarea name="notes" class="form-control bg-dark text-white" rows="4"></textarea>
-                    </div>
-                    
+                    </div>                    
                     <button type="submit" class="btn btn-primary w-100">Save Plant</button>
                 </form>
             </div>

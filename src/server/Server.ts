@@ -53,11 +53,11 @@ app.use(express.static("node_modules/bootstrap/dist")); // serve Bootstrap asset
  * Redirect requests to the root ("/") to the "/form" route.
  * This ensures that when a user visits the base URL, they are automatically sent to the form page.
  */
-//app.use("^/$", (req, resp) => resp.redirect("/form"));
+//app.use("^/$", (req, resp) => resp.redirect("/"));
 
 
 // this will automatically return a 404 for any non-defined route.
-// It's important that this is at the bottom, so that we only get here if the response wasn't handled correctly
+// It's important that this is at the bottom, so that we only get here if the response didn't have a route
 app.use((req:Request, resp: Response, next) => 
 {
     console.log("Defaulting to 404");
@@ -70,13 +70,9 @@ app.use((req:Request, resp: Response, next) =>
 
 
 
-
-
 // create and start server
 const server = createServer(app);
 server.listen(port, () => console.log(`HTTP Server listening on port ${port}`));
-
-
 
 
 
