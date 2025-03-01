@@ -29,6 +29,7 @@ export class Plant extends Model
             species: this.species,
             plantDate: new Date(this.plantDate).toLocaleDateString(), // format will be dd/mm/yyyy
             waterSchedule: this.ToScheduleString(this.waterSchedule),
+            waterScheduleInt: this.waterSchedule,
             lastWaterDate: new Date(this.lastWaterDate).toLocaleDateString(),
             notes: this.notes
         }
@@ -40,16 +41,17 @@ export class Plant extends Model
     ToScheduleString(schedule: number): string
     {
         if(schedule <= 1)
-            return "daily";
+            return "Daily";
         else if(schedule <= 2)
-            return "every other day";
+            return "Every Other Day";
         else if(schedule <= 7)
-            return "weekly";
+            return "Weekly";
         else if(schedule <= 14)
-            return "bi weekly";
+            return "Bi-Weekly";
         else
-            return "other";
+            return "Other";
     } 
+
 
 
     // The same as GetAllHandlbarData, but dates are formatted such that they'll populate correctly in the date input fields 
@@ -59,6 +61,7 @@ export class Plant extends Model
         
         data.plantDate = this.ToInputSafeDate(data.plantDate);
         data.lastWaterDate = this.ToInputSafeDate(data.lastWaterDate);
+        data.waterScheduleInt = this.waterSchedule;
 
         return data;
     }
@@ -196,7 +199,6 @@ Plant.init(
     tableName: 'Plants',  // this can be omitted, as the name will automatically be made the plural version of the modelName
     timestamps: false, // I don't care when the records were created or updated 
     underscored: true
-}
-);
+});
 
 export default {Plant, PlantInputData};

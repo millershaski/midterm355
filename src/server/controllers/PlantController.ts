@@ -69,7 +69,7 @@ function OnPlantInputInvalid(resp: Response)
 router.post("/:id/update", async (req: Request, resp: Response) =>
 {
     console.log("Dirty put");
-    await OnPlantPut_Update(req, resp);
+    //await OnPlantPut_Update(req, resp);
 });
 
 
@@ -77,7 +77,9 @@ router.post("/:id/update", async (req: Request, resp: Response) =>
 // update a plant
 router.put("/:id", async (req: Request, resp: Response) => 
 {
-    await OnPlantPut_Update(req, resp);
+    console.log("Correct put (update)");
+
+    // await OnPlantPut_Update(req, resp);
 });
     
 
@@ -112,7 +114,7 @@ router.get("/:id", async (req, resp) =>
         const foundPlant = await Plant.findOne({ where: {id: req.params.id} });
         
         if(foundPlant != null)
-            resp.render("singlePlant", foundPlant.GetAllHandlebarDataForEdit());
+            resp.render("editPlant", foundPlant.GetAllHandlebarDataForEdit());
         else
             resp.status(404).send(Get404PageString());        
     }

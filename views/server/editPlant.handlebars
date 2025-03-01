@@ -27,8 +27,9 @@
                     
                     <div class="mb-3">
                         <label for="wateringSchedule" class="form-label">Watering Schedule:</label>
-                        <select name="wateringSchedule" class="form-select bg-dark text-white">
-                            <option value="1" selected>Daily</option>
+                        <select name="wateringSchedule" class="form-select bg-dark text-white">                            
+                            <option value="{{waterScheduleInt}}" selected disabled hidden>{{waterSchedule}}</option>
+                            <option value="1">Daily</option>
                             <option value="2">Every Other Day</option>
                             <option value="7">Weekly</option>
                             <option value="14">Biweekly</option>
