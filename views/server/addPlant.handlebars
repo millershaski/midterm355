@@ -9,31 +9,31 @@
                 <form method="POST" id = "plantForm" novalidate>
                     <div class="mb-3">
                         <label for="plantLabel" class="form-label">Plant Label:</label>
-                        <input type="text" name="plantLabel" class="form-control bg-dark text-white" required>
+                        <input type="text" name="plantLabel" id ="plantLabel" class="form-control bg-dark text-white" required>
                         <div class="invalid-feedback">Please provide a plant label</div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="species" class="form-label">Species:</label>
-                        <input type="text" name="species" class="form-control bg-dark text-white" required>
+                        <input type="text" name="species" id="species" class="form-control bg-dark text-white" required>
                         <div class="invalid-feedback">Please provide a species</div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="plantDate" class="form-label">Planting Date:</label>
-                        <input type="date" name="plantDate" class="form-control bg-dark text-white" required>                        
+                        <input type="date" name="plantDate" id ="plantDate" class="form-control bg-dark text-white" required>                        
                         <div class="invalid-feedback">Please provide a date</div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="lastWaterDate" class="form-label">Last Watering Date:</label>
-                        <input type="date" value = "{{lastWaterDate}}" name="lastWaterDate" class="form-control bg-dark text-white" required>                        
+                        <input type="date" value = "{{lastWaterDate}}" name="lastWaterDate" id="lastWaterDate" class="form-control bg-dark text-white" required>                        
                         <div class="invalid-feedback">Please provide a date</div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="wateringSchedule" class="form-label">Watering Schedule:</label>
-                        <select name="wateringSchedule" class="form-select bg-dark text-white">
+                        <select name="wateringSchedule" id="wateringSchedule" class="form-select bg-dark text-white">
                             <option value="1" selected>Daily</option>
                             <option value="2">Every Other Day</option>
                             <option value="7">Weekly</option>
@@ -43,7 +43,7 @@
                     
                     <div class="mb-3">
                         <label for="notes" class="form-label">Additional Notes:</label>
-                        <textarea name="notes" class="form-control bg-dark text-white" rows="4"></textarea>
+                        <textarea name="notes" id="notes" class="form-control bg-dark text-white" rows="4"></textarea>
                     </div>
                     
                     <button type="submit" class="btn btn-primary w-100">Save Plant</button>
