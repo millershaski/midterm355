@@ -9,6 +9,8 @@ const router = express.Router();
 router.get("/changeSuccess", (req, resp) => resp.render("responseLayout/changeSuccess"));
 router.get("/changeFail", (req, resp) => resp.render("responseLayout/changeFail"));
 
+router.get("/addFail", (req, resp) => resp.render("responseLayout/addPlantFail"));
+
 router.get("/deleteSuccess", (req, resp) => resp.render("responseLayout/deleteSuccess"));
 router.get("/deleteFail", (req, resp) => resp.render("responseLayout/deleteFail"));
 
@@ -25,7 +27,7 @@ router.post("/new", async (req: Request, resp: Response) =>
 {
     const input: PlantInputData = new PlantInputData(req);
     if(input.IsValid() == false)
-        OnPlantInputInvalid(resp);    
+        OnPlantInputInvalid(resp, "responseLayout/addPlantFail")    
     else   
     {
         await Plant.create({label: input.plantLabel, species: input.species, plantDate: input.plantDate, waterSchedule: input.wateringSchedule, lastWaterDate: input.lastWaterDate, notes: input.notes});
@@ -35,7 +37,7 @@ router.post("/new", async (req: Request, resp: Response) =>
 
 
 
-function OnPlantInputInvalid(resp: Response)
+function OnPlantInputInvalid(resp: Response, layoutName: string)
 {
     let errorMessage = "";
     const allErrors = Validator.GetAllErrorMessages();
@@ -45,7 +47,13 @@ function OnPlantInputInvalid(resp: Response)
     });
 
     console.error("ERROR: " + errorMessage);
-    resp.status(400).send(errorMessage);
+
+    resp.render(layoutName, {}, (err, html) =>
+    {
+        resp.status(400).send(html); // this way, the sender can handle the html if they want to
+    });
+
+    //resp.status(400).send(errorMessage);
 }
 
 
@@ -63,7 +71,7 @@ router.put("/:id", async (req: Request, resp: Response) =>
 
     const input: PlantInputData = new PlantInputData(req);
     if(input.IsValid() == false)
-        OnPlantInputInvalid(resp);
+        OnPlantInputInvalid(resp, "responseLayout/changeFail");
     else   
     {
         await foundPlant.UpdateWith(input);

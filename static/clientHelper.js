@@ -19,14 +19,38 @@ function InitializePlantFormNew()
 
     form.addEventListener("submit", (event) =>
     {
-        if(form.checkValidity() == false) 
-        {
-            event.preventDefault();
-            event.stopPropagation();
-        }
+        if(form.checkValidity() == true) 
+            CreateCustomPostRequest(form);        
+
+        event.preventDefault();
+        event.stopPropagation(); // we never want to submit, because we're going to send a custom request to the server
         
         form.classList.add("was-validated");
+        
     }, false);
+}
+
+
+
+async function CreateCustomPutRequest(form)
+{
+    try 
+    {        
+        console.log("Putting to: " + window.location.href);
+
+        const response = await fetch(window.location.href,
+        {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(GetAllEditFormJSONData(form)) // edit data is the same as new data, so we can just re-use this
+        });
+
+        if(response.ok == false)
+            window.location.href = "/plants/addFail";
+    }
+    catch
+    {
+    }
 }
 
 
@@ -40,11 +64,12 @@ function InitializePlantFormEdit()
     form.addEventListener("submit", (event) =>
     {
         if(form.checkValidity() == true) 
-            CreateCustomPutRequest(form);
+            CreateCustomPutRequest(form);        
 
         event.preventDefault();
         event.stopPropagation(); // we never want to submit, because we're going to send a custom request to the server
         form.classList.add("was-validated");
+        
     }, false);
 }
 
@@ -61,9 +86,7 @@ async function CreateCustomPutRequest(form)
             body: JSON.stringify(GetAllEditFormJSONData(form))
         });
 
-        if(response.ok == true)       
-            window.location.href = "/plants/changeSuccess";
-        else        
+        if(response.ok == false)       
             window.location.href = "/plants/changeFail";
     }
     catch
