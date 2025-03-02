@@ -4,7 +4,7 @@
         <a href="/plants/{{id}}" class="text-decoration-none text-light"> <!-- removing text decoration so that all lines are not underlined, due to being part of an A tag -->
             <h3 class="card-title">{{label}}</h3>
             {{#if needsWater}}
-                <p class="text-warning">Needs Water</p>
+                <p class="text-warning"><strong>Needs Water!</strong></p>
             {{/if}}
             <p class="card-text"><strong>Species:</strong> {{species}}</p>
             <p class="card-text"><strong>Planting Date:</strong> {{plantDate}}</p>

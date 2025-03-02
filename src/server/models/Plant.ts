@@ -105,7 +105,7 @@ export class Plant extends Model
     DoesNeedWater(): boolean
     {
         const lastWaterDate: Date = new Date(this.lastWaterDate);
-        const lateDate: Date = new Date();
+        const lateDate: Date = new Date(this.lastWaterDate);
         lateDate.setDate(lastWaterDate.getDate() + this.waterSchedule);
 
         return new Date() >= lateDate;
