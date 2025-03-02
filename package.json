@@ -7,7 +7,7 @@
     "server": "tsc-watch --noClear --onsuccess \"node dist/server/server.js\"",
     "client": "webpack serve",
     "start": "npm-run-all --parallel server client",
-    "build": "tsc && webpack",
+    "build": "tsc --verbose && webpack",
     "start:prod": "node ../dist/server/server.js"
   },
   "keywords": [],
