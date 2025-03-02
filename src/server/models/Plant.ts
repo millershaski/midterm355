@@ -57,12 +57,7 @@ export class Plant extends Model
     {
         const data = this.GetAllHandlebarData();
         
-        
-        console.log("Checking water date:");
-        console.log(this.lastWaterDate);
-        console.log(new Date(this.lastWaterDate));
-
-        //data.plantDate = this.ToInputSafeDate(data.plantDate);
+        data.plantDate = this.ToInputSafeDate(data.plantDate);
         data.lastWaterDate = this.ToInputSafeDate(data.lastWaterDate);
         data.waterScheduleInt = this.waterSchedule;
 
@@ -74,14 +69,10 @@ export class Plant extends Model
     ToInputSafeDate(date: string): string
     {
         const asDate = new Date(date);
-
-        console.log("was: " + date + " and now it's: " + asDate);
         
         const year = asDate.getFullYear();
         const month = String(asDate.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
         const day = String(asDate.getDate()).padStart(2, '0');
-
-        console.log(asDate);
           
         return year + "-" + month + "-" + day;     
     }

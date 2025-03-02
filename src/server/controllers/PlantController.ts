@@ -44,7 +44,7 @@ function OnPlantInputInvalid(resp: Response)
         errorMessage += (value + "<br>");
     });
 
-    console.log("ERROR: " + errorMessage);
+    console.error("ERROR: " + errorMessage);
     resp.status(400).send(errorMessage);
 }
 
@@ -53,7 +53,7 @@ function OnPlantInputInvalid(resp: Response)
 // update a plant
 router.put("/:id", async (req: Request, resp: Response) => 
 {
-    const foundPlant = await Plant.findOne({ where: {id: req.params.id} });
+    const foundPlant = await FindPlant(req.params.id);
     if(foundPlant == null)
     {
         console.error("Unable to find plant with id: ", req.params.id); 
@@ -62,9 +62,6 @@ router.put("/:id", async (req: Request, resp: Response) =>
     }
 
     const input: PlantInputData = new PlantInputData(req);
-
-    console.log(input.lastWaterDate);
-    
     if(input.IsValid() == false)
         OnPlantInputInvalid(resp);
     else   
@@ -75,13 +72,27 @@ router.put("/:id", async (req: Request, resp: Response) =>
 });
     
 
+// we use this method so that we can add one to the imported dates
+async function FindPlant(id: string): Promise<Plant | null>
+{ 
+    const foundPlant = await Plant.findOne({ where: {id: id} });
+    if(foundPlant == null)
+        return foundPlant;
+
+    // for whatever reason, the timezone is not correct when we import the dates, so the day is off by one. This should be fine in the eastern time-zone
+    foundPlant.plantDate = IncreaseDayByOne(foundPlant.plantDate);
+    foundPlant.lastWaterDate = IncreaseDayByOne(foundPlant.lastWaterDate);
+    return foundPlant;
+}
+
+
 
 // view single plant (at bottom so that something like /plants/new is not blocked)
 router.get("/:id", async (req, resp) => 
 {
     try
     {
-        const foundPlant = await Plant.findOne({ where: {id: req.params.id} });
+        const foundPlant = await FindPlant(req.params.id);
         
         if(foundPlant != null)
             resp.render("editPlant", foundPlant.GetAllHandlebarDataForEdit());
@@ -96,9 +107,20 @@ router.get("/:id", async (req, resp) =>
 });
 
 
+
+function IncreaseDayByOne(rawDate: string): string
+{
+    var date = new Date(rawDate);
+    date.setDate(date.getDate() + 1);
+
+    return date.toString();
+}
+
+
+
 router.delete("/:id", async(req: Request, resp: Response) =>
 {
-    const foundPlant = await Plant.findOne({ where: {id: req.params.id} });
+    const foundPlant = await FindPlant(req.params.id);
     if(foundPlant == null)
     {
         console.error("Unable to find plant with id: ", req.params.id); 
