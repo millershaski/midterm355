@@ -1,5 +1,5 @@
 // this was placed in the static folder so that it would be correctly served to clients when they request it
-// due to the security settings, only javascript that we include in the server will work (putting it here worked, at least)
+// due to the security settings, only javascript that we include from the server will work (as opposed to javascript that we write in handlebars or directly in the html).
 
 
 document.addEventListener("DOMContentLoaded", () => 

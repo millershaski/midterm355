@@ -12,7 +12,7 @@ import { Get404PageString} from "./FileTemplates";
 
 
 const routes = require('./controllers'); 
-const port = 5250;
+const port = 5333;
 
 const app: Express = express(); 
 

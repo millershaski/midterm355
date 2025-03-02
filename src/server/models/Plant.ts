@@ -49,7 +49,8 @@ export class Plant extends Model
             waterSchedule: this.ToWaterScheduleString(this.waterSchedule),
             waterScheduleInt: this.waterSchedule,
             lastWaterDate: new Date(this.lastWaterDate).toLocaleDateString(),
-            notes: this.notes
+            notes: this.notes,
+            needsWater: this.DoesNeedWater()
         }
         return data;
     }
@@ -96,6 +97,18 @@ export class Plant extends Model
         const day = String(asDate.getDate()).padStart(2, '0');
           
         return year + "-" + month + "-" + day;     
+    }
+
+
+
+    // returns true if too many days have elapsed since the last water date
+    DoesNeedWater(): boolean
+    {
+        const lastWaterDate: Date = new Date(this.lastWaterDate);
+        const lateDate: Date = new Date();
+        lateDate.setDate(lastWaterDate.getDate() + this.waterSchedule);
+
+        return new Date() >= lateDate;
     }
 
 
