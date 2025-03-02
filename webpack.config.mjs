@@ -13,7 +13,7 @@ export default  {
     },
     devServer: {
         static: ["./static"],         
-        port: 5000,
+        port: 5250,
         client: { webSocketURL: "http://localhost:5050/ws" }
     },
     module: {
