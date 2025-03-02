@@ -6,11 +6,11 @@ import { Validator } from "../models/Validator";
 const router = express.Router();
 
 
-router.get("/changeSuccess", (req, resp) => resp.render("changeSuccess"));
-router.get("/changeFail", (req, resp) => resp.render("changeFail"));
+router.get("/changeSuccess", (req, resp) => resp.render("responseLayout/changeSuccess"));
+router.get("/changeFail", (req, resp) => resp.render("responseLayout/changeFail"));
 
-router.get("/deleteSuccess", (req, resp) => resp.render("deleteSuccess"));
-router.get("/deleteFail", (req, resp) => resp.render("deleteFail"));
+router.get("/deleteSuccess", (req, resp) => resp.render("responseLayout/deleteSuccess"));
+router.get("/deleteFail", (req, resp) => resp.render("responseLayout/deleteFail"));
 
 
 router.get("/new", async (req: Request, resp: Response) =>
@@ -28,8 +28,8 @@ router.post("/new", async (req: Request, resp: Response) =>
         OnPlantInputInvalid(resp);    
     else   
     {
-        await Plant.create({label: input.plantLabel, species: input.species, plantDate: input.plantDate, waterSchedule: input.wateringSchedule, lastWaterDate: input.plantDate, notes: input.notes});
-        resp.render("addPlantSuccess");
+        await Plant.create({label: input.plantLabel, species: input.species, plantDate: input.plantDate, waterSchedule: input.wateringSchedule, lastWaterDate: input.lastWaterDate, notes: input.notes});
+        resp.render("responseLayout/addPlantSuccess");
     }      
 });
 
@@ -44,7 +44,7 @@ function OnPlantInputInvalid(resp: Response)
         errorMessage += (value + "<br>");
     });
 
-    console.log(errorMessage);
+    console.log("ERROR: " + errorMessage);
     resp.status(400).send(errorMessage);
 }
 
@@ -62,12 +62,15 @@ router.put("/:id", async (req: Request, resp: Response) =>
     }
 
     const input: PlantInputData = new PlantInputData(req);
+
+    console.log(input.lastWaterDate);
+    
     if(input.IsValid() == false)
         OnPlantInputInvalid(resp);
     else   
     {
         await foundPlant.UpdateWith(input);
-        resp.render("changeSuccess");
+        resp.render("responseLayout/changeSuccess");
     }
 });
     

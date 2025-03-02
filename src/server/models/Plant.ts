@@ -57,7 +57,12 @@ export class Plant extends Model
     {
         const data = this.GetAllHandlebarData();
         
-        data.plantDate = this.ToInputSafeDate(data.plantDate);
+        
+        console.log("Checking water date:");
+        console.log(this.lastWaterDate);
+        console.log(new Date(this.lastWaterDate));
+
+        //data.plantDate = this.ToInputSafeDate(data.plantDate);
         data.lastWaterDate = this.ToInputSafeDate(data.lastWaterDate);
         data.waterScheduleInt = this.waterSchedule;
 
@@ -69,10 +74,14 @@ export class Plant extends Model
     ToInputSafeDate(date: string): string
     {
         const asDate = new Date(date);
+
+        console.log("was: " + date + " and now it's: " + asDate);
         
         const year = asDate.getFullYear();
         const month = String(asDate.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
         const day = String(asDate.getDate()).padStart(2, '0');
+
+        console.log(asDate);
           
         return year + "-" + month + "-" + day;     
     }
@@ -88,6 +97,7 @@ export class Plant extends Model
         this.label = newData.plantLabel;
         this.species = newData.species;
         this.plantDate = newData.plantDate;
+        this.lastWaterDate = newData.lastWaterDate;
         this.waterSchedule = newData.wateringSchedule;
         this.notes = newData.notes;
 
@@ -104,6 +114,7 @@ export class PlantInputData
     species: string = "";
     plantDate: string = "";
     wateringSchedule: number = 0;
+    lastWaterDate: string = "";
     notes: string = "";
 
     constructor(req: Request)
@@ -117,6 +128,7 @@ export class PlantInputData
             this.species = this.GetString("species", req);
             this.plantDate = this.GetString("plantDate", req);
             this.wateringSchedule = parseInt(this.GetString("wateringSchedule", req));
+            this.lastWaterDate = this.GetString("lastWaterDate", req);
             this.notes = this.GetString("notes", req); 
             if(this.notes == null)
                 this.notes = "";  
@@ -145,6 +157,7 @@ export class PlantInputData
         Validator.Validate(this.plantLabel, "Label", Validator.NotEmptyString);
         Validator.Validate(this.species, "Species", Validator.NotEmptyString);
         Validator.Validate(this.plantDate, "Plant Date", Validator.ValidateDate);
+        Validator.Validate(this.lastWaterDate, "Last Water Date", Validator.ValidateDate);
         Validator.Validate(this.wateringSchedule, "Watering Schedule", Validator.ValidateNonZeroPositiveNumber);
 
         return Validator.IsValid();

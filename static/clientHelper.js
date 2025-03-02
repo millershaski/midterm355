@@ -1,3 +1,5 @@
+// this was placed in the static folder so that it would be correctly served to clients when they request it
+// due to the security settings, only javascript that we include in the server will work (putting it here worked, at least)
 
 
 document.addEventListener("DOMContentLoaded", () => 
@@ -84,6 +86,7 @@ function GetAllEditFormJSONData(form)
         species: formData.get("species"),
         plantDate: formData.get("plantDate"),
         wateringSchedule: formData.get("wateringSchedule"),
+        lastWaterDate: formData.get("lastWaterDate"),
         notes: formData.get("notes")        
     };
 
