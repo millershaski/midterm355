@@ -8,7 +8,7 @@
     "client": "webpack serve",
     "start": "npm-run-all --parallel server client",
     "build": "tsc --listEmittedFiles && webpack",
-    "start:prod": "node ../dist/server/server.js"
+    "start:prod": "node dist/server/Server.js"
   },
   "keywords": [],
   "author": "",
