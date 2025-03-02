@@ -15,6 +15,26 @@ export class Plant extends Model
     declare notes: string; 
 
     
+    
+    // for whatever reason, the timezone is not correct when we import the dates, so the day is off by one. This should be fine in the eastern time-zone
+    FixDates()
+    {
+        this.plantDate = this.IncreaseDayByOne(this.plantDate);
+        this.lastWaterDate = this.IncreaseDayByOne(this.lastWaterDate);
+    }
+
+
+
+    IncreaseDayByOne(rawDate: string): string
+    {
+        var date = new Date(rawDate);
+        date.setDate(date.getDate() + 1);
+
+        return date.toString();
+    }
+
+
+
     // We use this method so that handlebars can correctly access the data (it can't access inherited members by default).
     // We can also perform some formatting things here.
     // This method returns plain data that handlebars can access

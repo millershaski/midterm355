@@ -79,9 +79,7 @@ async function FindPlant(id: string): Promise<Plant | null>
     if(foundPlant == null)
         return foundPlant;
 
-    // for whatever reason, the timezone is not correct when we import the dates, so the day is off by one. This should be fine in the eastern time-zone
-    foundPlant.plantDate = IncreaseDayByOne(foundPlant.plantDate);
-    foundPlant.lastWaterDate = IncreaseDayByOne(foundPlant.lastWaterDate);
+    foundPlant.FixDates();
     return foundPlant;
 }
 
@@ -105,16 +103,6 @@ router.get("/:id", async (req, resp) =>
         resp.status(500).send("Internal Server Error"); 
     }
 });
-
-
-
-function IncreaseDayByOne(rawDate: string): string
-{
-    var date = new Date(rawDate);
-    date.setDate(date.getDate() + 1);
-
-    return date.toString();
-}
 
 
 
