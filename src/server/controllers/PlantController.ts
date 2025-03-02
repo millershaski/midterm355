@@ -72,6 +72,7 @@ router.put("/:id", async (req: Request, resp: Response) =>
 });
     
 
+
 // we use this method so that we can add one to the imported dates
 async function FindPlant(id: string): Promise<Plant | null>
 { 
@@ -106,9 +107,10 @@ router.get("/:id", async (req, resp) =>
 
 
 
+// delete a plant
 router.delete("/:id", async(req: Request, resp: Response) =>
 {
-    const foundPlant = await FindPlant(req.params.id);
+    const foundPlant = await FindPlant(req.params.id); // we really don't have to fix the date for this one, but it's good practice to be consistent
     if(foundPlant == null)
     {
         console.error("Unable to find plant with id: ", req.params.id); 

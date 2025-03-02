@@ -1,9 +1,9 @@
 /*
     Tyler Millershaski
     CSS 355 Midterm
-
-    I did my best to start comments for Professor Lapan with "For Professor Lapan: "
 */
+
+
 import { createServer } from "http";
 import express, {Express, Request, Response } from "express"; 
 import helmet from "helmet";

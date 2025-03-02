@@ -16,7 +16,7 @@ export class Plant extends Model
 
     
     
-    // for whatever reason, the timezone is not correct when we import the dates, so the day is off by one. This should be fine in the eastern time-zone
+    // for whatever reason, the timezone is not correct when we import the dates, so the day is off by one. This hacky fix should be fine in the eastern time-zone
     FixDates()
     {
         this.plantDate = this.IncreaseDayByOne(this.plantDate);
@@ -46,7 +46,7 @@ export class Plant extends Model
             label: this.label,
             species: this.species,
             plantDate: new Date(this.plantDate).toLocaleDateString(), // format will be dd/mm/yyyy
-            waterSchedule: this.ToScheduleString(this.waterSchedule),
+            waterSchedule: this.ToWaterScheduleString(this.waterSchedule),
             waterScheduleInt: this.waterSchedule,
             lastWaterDate: new Date(this.lastWaterDate).toLocaleDateString(),
             notes: this.notes
@@ -56,7 +56,8 @@ export class Plant extends Model
     
 
 
-    ToScheduleString(schedule: number): string
+    // watering schedule is stored as a number, but it's better if the users see it as text
+    ToWaterScheduleString(schedule: number): string
     {
         if(schedule <= 1)
             return "Daily";
@@ -147,6 +148,7 @@ export class PlantInputData
         catch
         {
             // I don't care about the error too much, validation will fail later
+            // however, we could do something like Validator.AddError(caughtError)
         }         
     }
 
@@ -170,6 +172,7 @@ export class PlantInputData
         Validator.Validate(this.plantDate, "Plant Date", Validator.ValidateDate);
         Validator.Validate(this.lastWaterDate, "Last Water Date", Validator.ValidateDate);
         Validator.Validate(this.wateringSchedule, "Watering Schedule", Validator.ValidateNonZeroPositiveNumber);
+        // notes is not validated, because it can be blank
 
         return Validator.IsValid();
     }    
@@ -217,7 +220,7 @@ Plant.init(
 },
 {
     sequelize, 
-    modelName: "Plant", // The name of the model (used for table creation and associations)
+    modelName: "Plant",
     tableName: 'Plants',  // this can be omitted, as the name will automatically be made the plural version of the modelName
     timestamps: false, // I don't care when the records were created or updated 
     underscored: true
