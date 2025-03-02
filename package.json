@@ -1,5 +1,5 @@
 {
-  "name": "part2app",
+  "name": "midterm355",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,7 @@
     "client": "webpack serve",
     "start": "npm-run-all --parallel server client",
     "build": "tsc && webpack",
-    "start:prod": "node/dist/server.js"
+    "start:prod": "node dist/server/server.js"
   },
   "keywords": [],
   "author": "",
@@ -23,7 +23,7 @@
     "multer": "^1.4.5-lts.1",
     "sequelize": "^6.35.1",
     "sqlite3": "^5.1.6",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
