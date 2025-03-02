@@ -51,20 +51,18 @@ function InitializePlantFormEdit()
 async function CreateCustomPutRequest(form)
 {
     try 
-    {
-
-        window.location.href = "/";
-        return;
-        console.log("putting to: " + window.location.href + " : " + form);
-
-        GetAllEditFormJSONData(form);
-        
+    {        
         const response = await fetch(window.location.href,
         {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(GetAllEditFormJSONData(form))
         });
+
+        if(response.ok == true)       
+            window.location.href = "/plants/changeSuccess";
+        else        
+            window.location.href = "/plants/changeFail";
     }
     catch
     {
@@ -89,10 +87,6 @@ function GetAllEditFormJSONData(form)
         notes: formData.get("notes")        
     };
 
-    console.log(data);
-    console.log("About to string");
-    console.log(JSON.stringify(data));
-
     return data;
 }
 
@@ -110,7 +104,7 @@ function InitializeDeleteConfirm()
 
 
 // Handles delete requests when the user confirms a delete
-function OnDeleteClicked()
+async function OnDeleteClicked()
 {    
     // splitting should make this a bit more safe, in the event that parameters were passed to the url
     let deletePath = (window.location.href.split('?')[0]);
@@ -118,6 +112,15 @@ function OnDeleteClicked()
         deletePath += "/";
 
     deletePath += "delete";
+    
+    const response = await fetch(window.location.href,
+        {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        });
 
-    window.location.href = deletePath;
+        if(response.ok == true)       
+            window.location.href = "/plants/deleteSuccess";
+        else        
+            window.location.href = "/plants/deleteFail";
 }

@@ -1,23 +1,23 @@
 <h2>Home Garden Tracker</h2>
 
-    {{#if noPlants}}
-        <div>
-            No plant data found. Perhaps you want to add some?
-            <br><br>
-            Click <a href = "new">here</a> to add a plant.
-        </div>
+<div class="container mt-4">
+    <div class="row">
+        {{#each plant}}
+            
+            <div class="col-md-4 mb-4">
+                {{> singlePlantPartial}}
+                <br><br>
+            </div>
+        {{/each}}
 
-    {{else}}
-            <div class="container mt-4">
-                <div class="row">
-                    {{#each plant}}
-                        
-                        <div class="col-md-4 mb-4">
-                            {{> singlePlantPartial}}
-                            <br><br>
-                        </div>
-                    {{/each}}
+        <div class="col-md-4 mb-4">
+            <div class="card bg-dark border-light text-light">
+                <div class="card-body">
+                    <a href="/plants/new" class="text-decoration-none text-light">
+                        <h3 class="card-title">Add new plant +</h3>
+                    </a>
                 </div>
-            </div>    
-    {{/if}}
+            </div>
+        </div>
+    </div>
 </div>
